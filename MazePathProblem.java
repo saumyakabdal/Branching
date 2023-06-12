@@ -1,55 +1,40 @@
-import java.util.*;
+import java.util.ArrayList;
 
-class MazePathProblem {
-    public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+public class MazePathProblem {
 
-        System.out.print("Enter the number of rows in the maze: ");
-        int rows = scanner.nextInt();
+    static ArrayList<String> getMazePos(int currentRow, int currentCol, int endRow, int endCol) {
 
-        System.out.print("Enter the number of columns in the maze: ");
-        int columns = scanner.nextInt();
-
-        int[][] maze = new int[rows][columns];
-
-        System.out.println("Enter the maze layout (0 for empty path, 1 for blocked path):");
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < columns; j++) {
-                maze[i][j] = scanner.nextInt();
-            }
+        // Termination Case (Positive Case and Negative Case)
+        // Positive Case
+        if (currentCol == endCol && currentRow == endRow) {
+            ArrayList<String> result = new ArrayList<>();
+            result.add("");
+            return result;
+        }
+        // Negative Case
+        if (currentCol > endCol || currentRow > endRow) {
+            ArrayList<String> result = new ArrayList<>();
+            return result;
         }
 
-        List<String> path = new ArrayList<>();
-        boolean foundPath = findPath(maze, 0, 0, rows, columns, path);
-
-        if (foundPath) {
-            System.out.println("Path Found:");
-            for (String step : path) {
-                System.out.println(step);
-            }
-        } else {
-            System.out.println("No path found!");
+        // All the Right and Down Result Store in Final Result
+        ArrayList<String> finalResult = new ArrayList<>();
+        // Move to the Right
+        ArrayList<String> rightResult = getMazePos(currentRow, currentCol + 1, endRow, endCol);
+        for (String t : rightResult) {
+            finalResult.add("R" + t);
         }
-
-        scanner.close();
+        // On BackTrack so we have another choice (Makes Branch)
+        // Move to the Down
+        ArrayList<String> downResult = getMazePos(currentRow + 1, currentCol, endRow, endCol);
+        for (String t : downResult) {
+            finalResult.add("D" + t);
+        }
+        return finalResult;
     }
 
-    public static boolean findPath(int[][] maze, int row, int col, int rows, int columns, List<String> path) {
-        if (row < 0 || row >= rows || col < 0 || col >= columns || maze[row][col] == 1) {
-            return false;
-        }
-
-        if (row == rows - 1 && col == columns - 1) {
-            path.add("(" + row + ", " + col + ")");
-            return true;
-        }
-
-        if (findPath(maze, row + 1, col, rows, columns, path)
-                || findPath(maze, row, col + 1, rows, columns, path)) {
-            path.add("(" + row + ", " + col + ")");
-            return true;
-        }
-
-        return false;
+    public static void main(String[] args) {
+        ArrayList<String> result = getMazePos(0, 0, 2, 2);
+        System.out.println(result);
     }
 }
