@@ -1,7 +1,7 @@
 import java.util.Random;
 import java.util.Scanner;
 
-public class DiceBoardGame {
+public class DiceBoard {
     private static int targetScore;
     private static int[] scores;
     private static boolean[] completedPlayers;
